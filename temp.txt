@@ -1,0 +1,58 @@
+import numpy as np
+array = np.array([1,2,3,4,5,6,7,8])
+
+from PIL import Image
+import matplotlib.pyplot as plt
+
+tempo = plt.imread('Professional Picture 1.jpeg')
+hei = len(tempo)
+wid = len(tempo[0])
+
+RGB = []
+i=0
+j=0
+p=0
+for i in range(hei):
+    for j in range(wid):
+        if ((hei-1>i>1) and (wid-1>j>1)):
+            temp = abs((tempo[i][j][0] - tempo[i+1][j][0]))
+            mean = abs((tempo[i][j][0] + tempo[i+1][j][0]))/2
+            temp1 = abs((tempo[i][j][1] - tempo[i+1][j][1]))
+            mean1 = abs((tempo[i][j][1] + tempo[i+1][j][1]))/2
+            temp2 = abs((tempo[i][j][2] - tempo[i+1][j][2]))
+            mean2 = abs((tempo[i][j][2] + tempo[i+1][j][2]))/2
+            p=j
+            if ((temp > 2.7*mean) and (temp1 > 2.5*mean1) and (temp2 > 2.5*mean2)):
+                RGB.append([0,0,0])
+                #RGB[i][j][1].append([0])
+                #RGB[i][j][2].append([0])
+                #= [0,0,0]
+                #RGB[i][j][1] = 0
+                #RGB[i][j][2] = 0
+            else:
+                RGB.append([255,255,255])
+                #RGB[i][j][1].append([255])
+                #RGB[i][j][2].append([255])
+                #RGB[i][j][0] = [255,255,255]
+                #RGB[i][p][1] = 0
+                #RGB[i][p][2] = 0
+
+RBGF = [[],[],[]]
+for q in range(hei):
+    for r in range(wid):
+        print(q, r)
+        RBGF[q][r][0]= RGB[(q*wid)+r][0]
+        RBGF[q][r][1]= RGB[(q*wid)+r][1]
+        RBGF[q][r][2]= RGB[(q*wid)+r][2]
+        
+
+print(RBGF)
+
+rgb = np.asarray(RGB)
+rgb
+
+img1 = Image.fromarray(rgb, 'RGB')
+img1.save('my4.jpeg')
+img2 = Image.open('my4.jpeg')
+img2.convert(mode = 'L').save('my4_bw.jpeg')
+img2.show()
